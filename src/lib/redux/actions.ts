@@ -24,7 +24,7 @@ export const getPokemonPageWithThunk = (page: string | undefined) => {
 
   //TODO: type dispatch ⚠
   return async (dispatch: any, getState: any) => {
-    const response = await fetch(baseSearchURL + page);
+    const response = await fetch(page? page:baseSearchURL);
     if (response.ok) {
       const data = await response.json();
       dispatch(setPageResults(data));

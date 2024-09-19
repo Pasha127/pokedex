@@ -27,8 +27,8 @@ const SearchBar = (props: {
         >
           Back
         </button>
-        <input type="text" />
-        <button>Search Pokemon</button>
+        {/* <input type="text" />
+        <button>Search Pokemon</button> */}
         <button onClick={() => props.navigatePage(props.searchResults.next)}>
           Next
         </button>
