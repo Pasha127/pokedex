@@ -1,31 +1,40 @@
-import { useContext } from "react";
-import { AppContext } from "../../App";
+import { connect } from "react-redux";
+import { AppState, SearchResult } from "../../lib/types";
+import { getPokemonPageWithThunk } from "../../lib/redux/actions";
 
-const SearchBar = () => {
-  const store = useContext(AppContext);
+const mapStateToProps = (state: AppState) => {
+  return {
+    searchResults: state.searchResults,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    navigatePage: (page: string) => {
+      dispatch(getPokemonPageWithThunk(page));
+    },
+  };
+};
 
-  const searchPokemon = async (query: string) => {
-    const baseURL = import.meta.env.VITE_API_BASE_URL;
-    const response = await fetch(baseURL + query);
-    const data = await response.json();
-    store.setStore({ ...store, searchResults: data });
-  };
-  const navResults = async (direction: "next" | "previous") => {
-    if (!store.searchResults || !store.searchResults[direction]) return;
-    const response = await fetch(store.searchResults[direction]);
-    const data = await response.json();
-    store.setStore({ ...store, searchResults: data });
-  };
+const SearchBar = (props: {
+  navigatePage: any;
+  searchResults: SearchResult;
+}) => {
   return (
     <>
       <div className="search-container">
-        <button onClick={() => navResults("previous")}>Back</button>
+        <button
+          onClick={() => props.navigatePage(props.searchResults.previous)}
+        >
+          Back
+        </button>
         <input type="text" />
         <button>Search Pokemon</button>
-        <button onClick={() => navResults("next")}>Next</button>
+        <button onClick={() => props.navigatePage(props.searchResults.next)}>
+          Next
+        </button>
       </div>
     </>
   );
 };
 
-export default SearchBar;
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBar);

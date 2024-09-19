@@ -1,8 +1,22 @@
-import { useContext, useEffect, useState } from "react";
-import { SearchResult } from "../../lib/types";
-import { AppContext } from "../../App";
+import { useEffect } from "react";
+import { AppState, SearchResult } from "../../lib/types";
+import { connect } from "react-redux";
+import { getPokemonPageWithThunk } from "../../lib/redux/actions";
 
 const spriteBaseUrl = import.meta.env.VITE_SPRITE_BASE_URL;
+
+const mapStateToProps = (state: AppState) => {
+  return {
+    searchResults: state.searchResults,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    navigatePage: (page: string) => {
+      dispatch(getPokemonPageWithThunk(page));
+    },
+  };
+};
 
 const renderResults = (result: SearchResult) => {
   if (!result) return;
@@ -28,25 +42,15 @@ const renderResults = (result: SearchResult) => {
   );
 };
 
-const OutputContainer = () => {
-  const store = useContext(AppContext);
-  const [results, setResults] = useState<SearchResult | undefined>(undefined);
-
-  useEffect(() => {
-    if (store?.searchResults) {
-      setResults(store.searchResults);
-      return;
-    }
-    setResults(undefined);
-  }, [store.searchResults]);
-
+const OutputContainer = (props: { searchResults: SearchResult }) => {
   return (
     <>
       <div className="output-container">
-        {results && renderResults(results)}
+        <>{console.log(props)}</>
+        <>{props.searchResults && renderResults(props.searchResults)}</>
       </div>
     </>
   );
 };
 
-export default OutputContainer;
+export default connect(mapStateToProps, mapDispatchToProps)(OutputContainer);
