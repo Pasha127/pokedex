@@ -1,3 +1,5 @@
+@import "../../lib/style/variables";
+
 .search-container {
   margin-bottom: 40px;
   display: flex;
@@ -6,6 +8,19 @@
   justify-content: center;
 
   button {
+    caret-color: transparent;
     margin-inline: 10px;
+    border: 3px solid coral;
+    color: coral;
+    background-color: $tagupBG;
+    height: 44px;
+    width: 152px;
+    transition: 0.3s;
+
+    &:hover {
+      background-color: coral;
+      color: white;
+      cursor: pointer;
+    }
   }
 }
